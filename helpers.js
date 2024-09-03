@@ -1,27 +1,7 @@
 const fs = require('fs');
 const appRoot = process.cwd();
 
-const getConfigFile = () => {
-    let criticalcssConfig = null;
-    let criticalcssConfigFile = process.env.CRITICALCSS_CONFIG_FILE || 'criticalcss.config.json';
-    try {
-        criticalcssConfig = JSON.parse(fs.readFileSync(appRoot + '/' + criticalcssConfigFile, 'utf8'));
-    } catch (error) {
-        throw new Error('Error: You probably forgot to add a ' + criticalcssConfigFile + ' in the root of your project.')
-    }
-
-    if (!criticalcssConfig?.pages || criticalcssConfig?.pages.length === 0) {
-        throw new Error('Error: You need to provide pages as configuration (e.g. pages: [{"src": "https://www.site.com/", "target": "app/design/frontend/*company*/theme/web/css/cms-critical.css"}])');
-    }
-    if (!criticalcssConfig?.dimensions || criticalcssConfig?.dimensions.length === 0) {
-        throw new Error('Error: You need to provide dimensions as configuration ("dimensions": [{ "width": 320 },{ "width": 767 },{ "width": 992 },{ "width": 1200 },{ "width": 1424 }])');
-    }
-    return criticalcssConfig;
-
-}
-
-// Most used viewports
-// Widths and heights
+// Most used viewports, widths and heights
 const standardViewports = [
     { width: 2560, height: 1440 },
     { width: 1920, height: 1080 },
@@ -42,8 +22,6 @@ const getClosestHeight = (target) =>
         Math.abs(target - obj?.width) < Math.abs(target - acc?.width) ? obj : acc
     );
 
-
 module.exports = {
-    getConfigFile,
     getClosestHeight
 }
