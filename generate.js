@@ -1,59 +1,62 @@
 #!/usr/bin/env node
 
+const baseConfig = require('./config.default.js');
+const { config, pages } = require('../../criticalcss.config');
 const critical = require('critical');
-const { getConfigFile, getClosestHeight } = require('./helpers');
-const criticalcssConfig = getConfigFile();
+const { getClosestHeight } = require('./helpers');
 
-// Disables warnings
+if (!config) {
+    console.warn('WARNING: Project configuration missing, falling back to default configuration');
+}
+
+// Disables warnings.
 process.setMaxListeners(0);
 
-// No configs so stop
-if (!criticalcssConfig) {
+// No pages configured, so stop.
+if (!pages.pages) {
+    throw new Error('Error: You need to provide pages as configuration (e.g. pages: [{"src": "https://www.site.com/", "target": "app/design/frontend/*company*/theme/web/css/cms-critical.css"}])');
     return;
 }
 
-const domain = process.env.DOMAIN || criticalcssConfig?.domain;
-const waitBeforeRender = process.env.RENDER_WAIT_TIME || criticalcssConfig?.renderWaitTime || 2500;
-const penthouseTimeout = process.env.PENTHOUSE_TIMEOUT || criticalcssConfig?.penthouseTimeout || 30000;
-const forceIncludeList = criticalcssConfig?.forceInclude || [];
-const forceExcludeList = criticalcssConfig?.forceExclude || [];
-
-// The pages you want the critical css from (multiple pages and themes possible)
-const pages = criticalcssConfig?.pages || [];
-let dimensions = criticalcssConfig?.dimensions || [];
+const domain = process.env.DOMAIN || pages?.domain;
+if (!domain) {
+    throw new Error('Error: You need to provide a domain to target');
+    return;
+}
 
 // The dimensions you want critical css from.
+let dimensions = config?.dimensions || [];
 dimensions = dimensions?.map((dimension) => ({
     width: dimension?.width,
     height: dimension?.height ?? getClosestHeight(dimension?.width)?.height,
 }));
 
-console.log('Starting to create critical css bundles...');
+const defaultConfig = {
+    ...baseConfig,
+    ...config,
+    dimensions: dimensions
+}
 
+console.log('Starting to create critical css bundles...');
 function processPage() {
-    page = pages.shift();
+    const page = pages.pages.shift();
     if (page) {
         console.log(' > ' + domain + page.src);
-        critical.generate({
-            inline: false,
+        const pageConfig = {
             src: domain + page.src,
             css: page.css,
             target: {
                 css: page.target,
-            },
-            dimensions: dimensions,
-            penthouse: {
-                timeout: penthouseTimeout,
-                renderWaitTime: waitBeforeRender,
-                forceInclude: forceIncludeList,
-                forceExclude: forceExcludeList
             }
+        };
+
+        critical.generate({
+            ...defaultConfig,
+            ...pageConfig
         }).then(result => {
-            console.log(' ... has been generated');
+            console.log('   ... has been generated');
             processPage();
         });
     }
 }
 processPage();
-
-console.log('Finished generating critical css bundles!');
