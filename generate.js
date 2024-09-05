@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 
+const criticalcssConfigFile = process.env.CRITICALCSS_CONFIG_FILE || 'criticalcss.config';
+const { config, pages } = require('../../' + criticalcssConfigFile);
 const baseConfig = require('./config.default.js');
-const { config, pages } = require('../../criticalcss.config');
 const critical = require('critical');
 const { getClosestHeight } = require('./helpers');
 
