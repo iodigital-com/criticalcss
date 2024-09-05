@@ -91,7 +91,7 @@ If you want to explicitly use a set height, you may add it to the `dimensions` a
 
 ### Running it
 
-To use this package, you need to run: `npx @iodigital/criticalcss` in the command line.
+To use this package, you need to run: `npx iodigital-criticalcss` in the command line.
 
 #### Using environment variables
 
@@ -104,11 +104,11 @@ There are some environment variables that can be used while generating the criti
 ##### How to use environment variables
 ```sh
 export DOMAIN=https://www.google.com
-npx @iodigital/criticalcss
+npx iodigital-criticalcss
 ```
 
 or
 
 ```sh
-DOMAIN=https://www.google.com npx @iodigital/criticalcss
+DOMAIN=https://www.google.com npx iodigital-criticalcss
 ```

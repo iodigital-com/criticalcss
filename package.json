@@ -6,7 +6,9 @@
         "helpers.js",
         "generate.js"
     ],
-    "bin": "generate.js",
+    "bin": {
+        "iodigital-criticalcss": "generate.js"
+    },
     "author": {
         "name": "iO",
         "website": "https://iodigital.com"
@@ -16,6 +18,6 @@
         "critical": "^4.0.1"
     },
     "volta": {
-        "node": "14.21.3"
+        "node": "20.17.0"
     }
 }
