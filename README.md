@@ -99,6 +99,7 @@ There are some environment variables that can be used while generating the criti
 
 ##### Available environment variables
 - DOMAIN: When domain is set, this will be used to render criticalcss for.
+- CRITICALCSS_CONFIG_FILE: You can alter the criticalcss configuration file that will be used. Can be useful when deploying to more than one environment or to support multiple themes.
 
 ##### How to use environment variables
 ```sh
