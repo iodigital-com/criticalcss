@@ -1,10 +1,11 @@
 {
     "name": "@iodigital/criticalcss",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "NPM package to generate critical css via a configuration file",
     "files": [
         "helpers.js",
-        "generate.js"
+        "generate.js",
+        "config.default.js"
     ],
     "bin": {
         "iodigital-criticalcss": "generate.js"
